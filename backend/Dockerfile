@@ -1,12 +1,14 @@
 FROM node:18-alpine
 
 WORKDIR /app
-COPY package.json package.json
-RUN npm install --production
+
+RUN apk add --no-cache python3 make g++ libc6-compat
+
+COPY package*.json ./
+RUN npm install
 
 COPY . .
 
-# Ensure DB file exists
 RUN node -e "require('./db'); console.log('db init ok')"
 
 EXPOSE 4000
